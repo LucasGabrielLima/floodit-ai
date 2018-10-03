@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <graphviz/cgraph.h>
 
 int main(int argc, char const *argv[]) {
   int i, j, n, m, k;
@@ -24,6 +24,6 @@ int main(int argc, char const *argv[]) {
       }
     }
   }
-  
+
   return 0;
 }

@@ -9,18 +9,18 @@ typedef struct {
   int **tabuleiro;
 } ttabuleiro;
 
-int valido(ttabuleiro t, int x, int y, char **visitados){
-  return (x >= 0) && (y >= 0) && (x < t.nlinhas) && (y < t.ncolunas) && !visitados[x][y];
+int valido(ttabuleiro t, int x, int y, int cor, char **visitados){
+  return (x >= 0) && (y >= 0) && (x < t.nlinhas) && (y < t.ncolunas) && (!visitados[x][y]) && (t.tabuleiro[x][y] == cor);
 }
 
 void zera_visitados(char ***visitados, int nlin, int ncol){
   for(int i = 0; i < nlin;i++)
     for(int j = 0; j < ncol; j++){
-      printf("%d\n", j);
-      *visitados[i][j] = 0;
+      (*visitados)[i][j] = 0;
     }
 }
 
+//Não conta nó inicial
 int tamanho_area(ttabuleiro t, int x, int y, char **visitados){
   int cor = t.tabuleiro[x][y];
 
@@ -32,7 +32,7 @@ int tamanho_area(ttabuleiro t, int x, int y, char **visitados){
 
   //Itera em todas as direções
   for(int i = 0; i < 8; i++){
-    if(valido(t, x + index_linha[i], y + index_col[i], visitados)){
+    if(valido(t, x + index_linha[i], y + index_col[i], cor, visitados)){
       return (tamanho_area(t, x + index_linha[i], y + index_col[i], visitados) + 1);
     }
 

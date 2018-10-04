@@ -20,14 +20,15 @@ int main(int argc, char const *argv[]) {
   t.nlinhas = n;
   t.ncolunas = m;
   t.ncores = k;
-  t.tabuleiro = (int **) malloc(n * sizeof(int));
+  t.tabuleiro = (int **) malloc(n * sizeof(int *));
   for(int i = 0; i < n; i++) t.tabuleiro[i] = (int *) malloc(m * sizeof(int));
 
-  le tabuleiro
+  puts("a");
+  // le tabuleiro
   for(i = 0; i < n; i++){
     for(j = 0; j < m; j++){
       scanf("%d", &t.tabuleiro[i][j]);
-
+      puts("b");
       if(t.tabuleiro[i][j] > k){
         printf("Cor %d fora do intervalo [1..%d]\n", t.tabuleiro[i][j], k);
         exit(1);
@@ -47,13 +48,13 @@ int tamanho_area(ttabuleiro t, int x, int y){
   char **visitados;
   int cor = t.tabuleiro[x][y];
 
-  visitados = (char **) malloc(t.nlinhas * sizeof(char));
-  for(int i = 0; i < t.nlinhas; i++) visitados = (char *) malloc(t.ncolunas * sizeof(char));
+  puts("a");
+  visitados = (char **) malloc(t.nlinhas * sizeof(char *));
+  for(int i = 0; i < t.nlinhas; i++) visitados[i] = (char *) malloc(t.ncolunas * sizeof(char));
   // memset(visitados, 0, sizeof(visitados));
-
+  puts("a");
   for(int i = 0; i < t.nlinhas;i++)
     for(int j = 0; j < t.ncolunas; j++){
-
-
+      visitados[i][j] = 0;
     }
 }

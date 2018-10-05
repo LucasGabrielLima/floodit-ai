@@ -20,25 +20,43 @@ void zera_visitados(char ***visitados, int nlin, int ncol){
     }
 }
 
-//Não conta nó inicial
-int tamanho_area(ttabuleiro t, int x, int y, char **visitados){
+int tamanho_area(ttabuleiro t, int x, int y, char ***visitados){
   int cor = t.tabuleiro[x][y];
+  int total = 1;
 
   //Map de direções
   int index_linha[] = {-1, -1, -1,  0, 0,  1, 1, 1};
   int index_col[]   = {-1,  0,  1, -1, 1, -1, 0, 1};
 
-  visitados[x][y] = 1;
+  (*visitados)[x][y] = 1;
 
   //Itera em todas as direções
   for(int i = 0; i < 8; i++){
-    if(valido(t, x + index_linha[i], y + index_col[i], cor, visitados)){
-      return (tamanho_area(t, x + index_linha[i], y + index_col[i], visitados) + 1);
+    if(valido(t, x + index_linha[i], y + index_col[i], cor, (*visitados)  )){
+      total += (tamanho_area(t, x + index_linha[i], y + index_col[i], visitados));
     }
 
+    //se passou por todas as direções
+    if(i == 7){
+      return total;
+
+    }
   }
 
   return 1;
+}
+
+void percorre_borda(ttabuleiro t){
+  int i = 0;
+  int j = 0;
+  int cor = t.tabuleiro[0][0];
+
+  for(j = 0; t.tabuleiro[i][j] == cor; j++){
+    for(i = 0; t.tabuleiro[i][j] == cor; i++){
+
+    }
+
+  }
 }
 
 int main(int argc, char const *argv[]) {
@@ -72,7 +90,7 @@ int main(int argc, char const *argv[]) {
 
   puts("a");
   zera_visitados(&visitados, t.nlinhas, t.ncolunas);
-  int tam = tamanho_area(t, 0, 0, visitados);
+  int tam = tamanho_area(t, 0, 0, &visitados);
   printf("%d\n", tam);
   return 0;
 }

@@ -46,42 +46,6 @@ int tamanho_area(ttabuleiro t, int x, int y, char ***visitados){
   return 1;
 }
 
-void percorre_borda(ttabuleiro t, char ***visitados){
-  int i, j, cor = t.tabuleiro[0][0];
-
-  //Array de ontagem de quantas casas de cada cor serão conquistadas
-  int cores[t.ncores]; //Cada índice é o score da respectiva cor-1
-
-  for(i = 0; i < t.ncores; i++){
-    cores[i] = 0;
-  }
-
-  j = 0;
-  i = 0;
-  while(t.tabuleiro[i][j] == cor && i + 1 < t.nlinhas){
-    while(t.tabuleiro[i][j] == cor && j + 1 < t.ncolunas){
-      //casa ao lado da borda
-      if(t.tabuleiro[i + 1][j] != cor){
-        //computa score da área vizinha
-        cores[(t.tabuleiro[i + 1][j]) - 1] += tamanho_area(t, i+1, j, visitados);
-      }
-
-      if(t.tabuleiro[i][j + 1] != cor){
-        //computa score da área vizinha
-        cores[(t.tabuleiro[i][j + 1]) - 1] += tamanho_area(t, i, j+1, visitados);
-      }
-
-      j++;
-    }
-
-    i++;
-  }
-  for(i = 0; i < t.ncores; i++){
-    printf("%d: %d\n", i, cores[i] );
-  }
-
-}
-
 int main() {
   int i, j, n, m, k;
   ttabuleiro t;

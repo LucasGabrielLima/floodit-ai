@@ -65,6 +65,9 @@ void insertList(typeList *list, ttabuleiro t, int cor_pai, int cor, int nivel){
   node = (typeNode*) malloc(sizeof(typeNode));
   node->cor_pai = cor_pai;
   node->nivel = nivel;
+  node->t.nlinhas = t.nlinhas;
+  node->t.ncolunas = t.ncolunas;
+  node->t.ncores = t.ncores;
   node->t.tabuleiro = (int **) malloc(t.nlinhas * sizeof(int *));
   for(int i = 0; i < t.nlinhas; i++) node->t.tabuleiro[i] = (int *) malloc(t.ncolunas * sizeof(int));
 

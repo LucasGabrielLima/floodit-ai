@@ -47,6 +47,7 @@ void expande_raiz(typeList *fila, typeNode nodo){
 
   for(int i = 1; i <= ncores; i++){
     if(i != cor){
+      puts("fo");
       insertList(fila, nodo.t, i, i, 1);
     }
 
@@ -80,31 +81,23 @@ int escolhe_cor(ttabuleiro t){
 
   initList(&fila);
   insertList(&fila, t, 0, 0, 0);
-  nodo_inicial = removeList(&fila, fila.first);
+  nodo_inicial = removeList(&fila, fila.first->next);
   //Cria estados iniciais e salva a cor que levou a cada um deles
+  printf(" %d\n", (*nodo_inicial).nivel);
   expande_raiz(&fila, *nodo_inicial);
 
-  while(fila.first->nivel < TAM_BUSCA){
+  while(fila.first->next->nivel < TAM_BUSCA){
+    puts("foi");
 
-    nodo_aux = removeList(&fila, fila.first);
+    nodo_aux = removeList(&fila, fila.first->next);
     expande_estado(&fila, *nodo_aux, &visitados);
+    free(nodo_aux->t.tabuleiro);
+    free(nodo_aux);
 
   }
 
   printList(&fila);
-  // initFila(fila)
-  // nodo = novoNodo(tabuleiro)
-  // insere(File, nodo)
-  //
-  // while(!filaVazia()){
-  //   //tira um cara da fila
-  //   //Se cara.nivel < TAM_BUSCA
-  //     //ex pan de
-  //   //Se cara.nivel = TAM_BUSCA
-  //     //Olha o tamanho
-  //
-  //
-  // }
+
 }
 
 

@@ -43,6 +43,10 @@ int isEmptyList(typeList *list){
   return (list->length == 0);
 }
 
+int isEmptyListInt(typeListInt *list){
+  return (list->length == 0);
+}
+
 void insertList(typeList *list, ttabuleiro t, int cor_pai, int cor, int nivel){
   typeNode *node; // auxiliary node
 
@@ -108,6 +112,49 @@ void printList(typeList *list){
   while(i->next != list->first){
     i = i->next;
     printf(" - %d", i->tam_area);
+  }
+
+  return;
+}
+
+void initListInt(typeListInt *list){
+  list->first = (typeNodeInt*) malloc(sizeof(typeNodeInt));
+  list->first->next = list->first;
+  list->first->prev = list->first;
+
+  list->length = 0;
+  return;
+}
+
+
+void insertListInt(typeListInt *list, int key){
+  typeNodeInt *node; // auxiliary node
+
+  node = (typeNodeInt*) malloc(sizeof(typeNodeInt));
+  node->key = key;
+
+  node->next = list->first;
+  node->prev = list->first->prev;
+  list->first->prev->next = node;
+
+  list->first->prev = node;
+  list->length++;
+  return;
+}
+
+void printListInt(typeListInt *list){
+  typeNodeInt *i; //iterator pointer
+
+  if(isEmptyListInt(list)){
+    return;
+  }
+
+  i = list->first->next;
+  printf("%d", i->key);
+
+  while(i->next != list->first){
+    i = i->next;
+    printf(" %d", i->key);
   }
 
   return;

@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include "lista.h"
 
-#define TAM_BUSCA 3
+// Define altura máxima da árvore de busca. Com nível 3 a melhora é considerável porém o tempo de execução com 100x100 e 10 cores passa de um minuto
+#define TAM_BUSCA 2
 
 int valido(ttabuleiro t, int x, int y, int cor, char **visitados){
   return (x >= 0) && (y >= 0) && (x < t.nlinhas) && (y < t.ncolunas) && (!visitados[x][y]) && (t.tabuleiro[x][y] == cor);
@@ -91,7 +92,7 @@ int escolhe_cor(ttabuleiro t, char ***visitados){
   nodo_inicial = removeList(&fila, fila.first->next);
   //Cria estados iniciais e salva a cor que levou a cada um deles
   zera_visitados(visitados, t.nlinhas, t.ncolunas);
-  if(cor = expande_raiz(&fila, *nodo_inicial, visitados)){
+  if((cor = expande_raiz(&fila, *nodo_inicial, visitados))){
     return cor;
   }
 
@@ -99,7 +100,6 @@ int escolhe_cor(ttabuleiro t, char ***visitados){
     nodo_aux = removeList(&fila, fila.first->next);
     zera_visitados(visitados, t.nlinhas, t.ncolunas);
     if(expande_estado(&fila, *nodo_aux, visitados)){
-      //TODO: Dar free no resto da lista etc
       return nodo_aux->cor_pai;
     };
     free(nodo_aux->t.tabuleiro);
@@ -128,6 +128,7 @@ int escolhe_cor(ttabuleiro t, char ***visitados){
 int main() {
   int i, j, n, m, k, cor_atual;
   ttabuleiro t;
+  typeListInt resultados;
   char **visitados;
 
   //le lunhas e colinas
@@ -142,6 +143,8 @@ int main() {
   //Aloca Matriz de células já visitadas
   visitados = (char **) malloc(n * sizeof(char *));
   for(int i = 0; i < n; i++) visitados[i] = (char *) malloc(m * sizeof(char));
+
+  initListInt(&resultados);
 
   // le tabuleiro
   for(i = 0; i < n; i++){
@@ -158,9 +161,13 @@ int main() {
   while(tamanho_area(t, 0, 0, &visitados) < t.nlinhas * t.ncolunas){
     cor_atual = escolhe_cor(t, &visitados);
     pinta_mapa(&t, cor_atual);
-    printf("%d ", cor_atual);
+    insertListInt(&resultados, cor_atual);
     zera_visitados(&visitados, t.nlinhas, t.ncolunas);
   }
+
+  //Imprime resultados
+  printf(" %d\n", resultados.length);
+  printListInt(&resultados);
 
 
 

@@ -1,0 +1,4 @@
+Estratégia de busca usada:
+A partir da raíz expandimos dois níveis da árvore, verificamos nas folhas qual o tabuleiro que está com a maior área pintada e escolhemos a cor que foi aplicada na raíz para chegar ao tabuleiro com a maior área pintada. Pintamos com essa cor escolhida e repetimos o processo até completar o tabuleiro. É uma espécie de algoritmo guloso mas que vê um passo a frente ou uma subida de encosta com visão de dois passos.
+
+

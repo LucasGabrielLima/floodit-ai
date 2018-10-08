@@ -28,3 +28,4 @@ typeNode* removeList(typeList *list, typeNode *i);
 void insertList(typeList *list, ttabuleiro t, int cor_pai, int cor, int nivel);
 void newNode(typeNode **node, ttabuleiro t);
 void printList(typeList *list);
+void pinta_mapa(ttabuleiro *m, int cor);

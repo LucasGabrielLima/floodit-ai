@@ -43,22 +43,6 @@ int isEmptyList(typeList *list){
   return (list->length == 0);
 }
 
-// void newNode(typeNode **node, ttabuleiro t){
-//   (*node) = (typeNode*) malloc(sizeof(typeNode));
-//
-//   (*node)->t.nlinhas = t.nlinhas;
-//   (*node)->t.ncolunas = t.ncolunas;
-//   node.t.tabuleiro = (int **) malloc(t.nlinhas * sizeof(int *));
-//   for(int i = 0; i < t.nlinhas; i++) (*node)->t.tabuleiro[i] = (int *) malloc(t.ncolunas * sizeof(int));
-//
-//   for(int i = 0; i < t.nlinhas; i++){
-//     for(int j = 0; j < t.ncolunas; j++){
-//       (*node)->t.tabuleiro[i][j] = t.tabuleiro[i][j];
-//     }
-//   }
-//
-// }
-
 void insertList(typeList *list, ttabuleiro t, int cor_pai, int cor, int nivel){
   typeNode *node; // auxiliary node
 

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "lista.h"
 
-#define TAM_BUSCA 4
+#define TAM_BUSCA 3
 
 int valido(ttabuleiro t, int x, int y, int cor, char **visitados){
   return (x >= 0) && (y >= 0) && (x < t.nlinhas) && (y < t.ncolunas) && (!visitados[x][y]) && (t.tabuleiro[x][y] == cor);
@@ -41,20 +41,26 @@ int tamanho_area(ttabuleiro t, int x, int y, char ***visitados){
   return 1;
 }
 
-void expande_raiz(typeList *fila, typeNode nodo){
+int expande_raiz(typeList *fila, typeNode nodo, char ***visitados){
   int cor = nodo.t.tabuleiro[0][0];
   int ncores = nodo.t.ncores;
 
   for(int i = 1; i <= ncores; i++){
     if(i != cor){
-      puts("fo");
       insertList(fila, nodo.t, i, i, 1);
+      zera_visitados(visitados, nodo.t.nlinhas, nodo.t.ncolunas);
+      fila->first->prev->tam_area = tamanho_area(fila->first->prev->t, 0, 0, visitados);
+      if(fila->first->prev->tam_area == nodo.t.nlinhas * nodo.t.ncolunas){
+        return i;
+      }
     }
-
   }
+
+  return 0;
 }
 
-void expande_estado(typeList *fila, typeNode nodo, char ***visitados){
+//Retorna 1 se resolveu tabuleiro, 0 caso contrario
+int expande_estado(typeList *fila, typeNode nodo, char ***visitados){
   int cor = nodo.t.tabuleiro[0][0];
   int ncores = nodo.t.ncores;
 
@@ -64,46 +70,63 @@ void expande_estado(typeList *fila, typeNode nodo, char ***visitados){
       insertList(fila, nodo.t, nodo.cor_pai, i, nodo.nivel + 1);
       zera_visitados(visitados, nodo.t.nlinhas, nodo.t.ncolunas);
       fila->first->prev->tam_area = tamanho_area(fila->first->prev->t, 0, 0, visitados);
+
+      if(fila->first->prev->tam_area == nodo.t.nlinhas * nodo.t.ncolunas){
+        return 1;
+      }
     }
 
   }
+
+  return 0;
 }
 
-int escolhe_cor(ttabuleiro t){
+int escolhe_cor(ttabuleiro t, char ***visitados){
   typeList fila;
   typeNode *nodo_inicial, *nodo_aux;
-  char **visitados;
-  int maior_area;
-
-  //Aloca Matriz de células já visitadas
-  visitados = (char **) malloc(t.nlinhas * sizeof(char *));
-  for(int i = 0; i < t.nlinhas; i++) visitados[i] = (char *) malloc(t.ncolunas * sizeof(char));
+  int maior_area = 0, cor = 0;
 
   initList(&fila);
   insertList(&fila, t, 0, 0, 0);
   nodo_inicial = removeList(&fila, fila.first->next);
   //Cria estados iniciais e salva a cor que levou a cada um deles
-  printf(" %d\n", (*nodo_inicial).nivel);
-  expande_raiz(&fila, *nodo_inicial);
+  zera_visitados(visitados, t.nlinhas, t.ncolunas);
+  if(cor = expande_raiz(&fila, *nodo_inicial, visitados)){
+    return cor;
+  }
 
   while(fila.first->next->nivel < TAM_BUSCA){
-    puts("foi");
-
     nodo_aux = removeList(&fila, fila.first->next);
-    expande_estado(&fila, *nodo_aux, &visitados);
+    zera_visitados(visitados, t.nlinhas, t.ncolunas);
+    if(expande_estado(&fila, *nodo_aux, visitados)){
+      //TODO: Dar free no resto da lista etc
+      return nodo_aux->cor_pai;
+    };
     free(nodo_aux->t.tabuleiro);
     free(nodo_aux);
 
   }
 
-  printList(&fila);
+  // printList(&fila);
 
+  while(fila.length > 0){
+    nodo_aux = removeList(&fila, fila.first->next);
+    if(nodo_aux->tam_area > maior_area){
+      maior_area = nodo_aux->tam_area;
+      cor = nodo_aux->cor_pai;
+    }
+
+    free(nodo_aux->t.tabuleiro);
+    free(nodo_aux);
+  }
+
+  return cor;
 }
 
 
 
 int main() {
-  int i, j, n, m, k;
+  int i, j, n, m, k, cor_atual;
   ttabuleiro t;
   char **visitados;
 
@@ -132,9 +155,14 @@ int main() {
   }
 
   zera_visitados(&visitados, t.nlinhas, t.ncolunas);
-  int tam = tamanho_area(t, 0, 0, &visitados);
-  printf("%d\n", tam);
+  while(tamanho_area(t, 0, 0, &visitados) < t.nlinhas * t.ncolunas){
+    cor_atual = escolhe_cor(t, &visitados);
+    pinta_mapa(&t, cor_atual);
+    printf("%d ", cor_atual);
+    zera_visitados(&visitados, t.nlinhas, t.ncolunas);
+  }
 
-  escolhe_cor(t);
+
+
   return 0;
 }
